@@ -1,0 +1,52 @@
+package com.kolisnichenko2828.randomusers.data.remote
+
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class UsersDto(
+    @SerialName("id") val id: String,
+    @SerialName("username") val username: String,
+    @SerialName("password") val password: String,
+    @SerialName("email") val email: String,
+    @SerialName("name") val name: String,
+    @SerialName("first_name") val firstName: String,
+    @SerialName("last_name") val lastName: String,
+    @SerialName("full_name") val fullName: String,
+    @SerialName("prefix") val prefix: String,
+    @SerialName("suffix") val suffix: String,
+    @SerialName("phone") val phone: String,
+    @SerialName("cell") val cell: String,
+    @SerialName("address") val address: String,
+    @SerialName("street_address") val streetAddress: String,
+    @SerialName("city") val city: String,
+    @SerialName("state") val state: String,
+    @SerialName("postal_code") val postalCode: String,
+    @SerialName("country") val country: String,
+    @SerialName("latitude") val latitude: Double,
+    @SerialName("longitude") val longitude: Double,
+    @SerialName("timezone") val timezone: String,
+    @SerialName("dob") val dob: String,
+    @SerialName("age") val age: Int,
+    @SerialName("gender") val gender: String,
+    @SerialName("job") val job: String,
+    @SerialName("company") val company: String,
+    @SerialName("company_email") val companyEmail: String,
+    @SerialName("ssn") val ssn: String,
+    @SerialName("credit_card") val creditCard: String,
+    @SerialName("credit_card_provider") val creditCardProvider: String,
+    @SerialName("iban") val iban: String,
+    @SerialName("ipv4") val ipv4: String,
+    @SerialName("ipv6") val ipv6: String,
+    @SerialName("mac_address") val macAddress: String,
+    @SerialName("user_agent") val userAgent: String,
+    @SerialName("url") val url: String,
+    @SerialName("domain") val domain: String,
+    @SerialName("picture") val picture: String,
+    @SerialName("avatar") val avatar: String,
+    @SerialName("uuid") val uuid: String,
+    @SerialName("md5") val md5: String,
+    @SerialName("sha1") val sha1: String,
+    @SerialName("sha256") val sha256: String,
+    @SerialName("locale") val locale: String
+)

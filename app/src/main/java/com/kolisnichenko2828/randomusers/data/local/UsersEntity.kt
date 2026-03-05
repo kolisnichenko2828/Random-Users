@@ -1,0 +1,52 @@
+package com.kolisnichenko2828.randomusers.data.local
+
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity(tableName = "users")
+data class UsersEntity(
+    @PrimaryKey val id: String,
+    val username: String,
+    val password: String,
+    val email: String,
+    val name: String,
+    val firstName: String,
+    val lastName: String,
+    val fullName: String,
+    val prefix: String,
+    val suffix: String,
+    val phone: String,
+    val cell: String,
+    val address: String,
+    val streetAddress: String,
+    val city: String,
+    val state: String,
+    val postalCode: String,
+    val country: String,
+    val latitude: Double,
+    val longitude: Double,
+    val timezone: String,
+    val dob: String,
+    val age: Int,
+    val gender: String,
+    val job: String,
+    val company: String,
+    val companyEmail: String,
+    val ssn: String,
+    val creditCard: String,
+    val creditCardProvider: String,
+    val iban: String,
+    val ipv4: String,
+    val ipv6: String,
+    val macAddress: String,
+    val userAgent: String,
+    val url: String,
+    val domain: String,
+    val picture: String,
+    val avatar: String,
+    val uuid: String,
+    val md5: String,
+    val sha1: String,
+    val sha256: String,
+    val locale: String
+)
