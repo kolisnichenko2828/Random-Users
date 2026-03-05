@@ -1,7 +1,7 @@
 package com.kolisnichenko2828.randomusers.di
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
-import com.kolisnichenko2828.randomusers.data.local.UsersDao
+import com.kolisnichenko2828.randomusers.data.local.UsersDatabase
 import com.kolisnichenko2828.randomusers.data.remote.UsersApi
 import com.kolisnichenko2828.randomusers.data.remote.UsersRepository
 import dagger.Module
@@ -57,11 +57,11 @@ object RemoteModule {
     @Singleton
     fun provideUsersRepository(
         api: UsersApi,
-        dao: UsersDao
+        database: UsersDatabase
     ): UsersRepository {
         return UsersRepository(
             api = api,
-            dao = dao
+            database = database
         )
     }
 }

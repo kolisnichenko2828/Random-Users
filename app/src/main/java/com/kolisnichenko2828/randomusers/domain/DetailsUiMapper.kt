@@ -10,7 +10,7 @@ import com.kolisnichenko2828.randomusers.presentation.details.WorkUiModel
 
 fun UsersModel.toDetailsUiModel(): DetailsUiModel {
     return DetailsUiModel(
-        id = this.id,
+        uuid = this.uuid,
         header = HeaderUiModel(
             avatarUrl = this.picture,
 
@@ -56,8 +56,4 @@ fun UsersModel.toDetailsUiModel(): DetailsUiModel {
             hashes = "MD5: ${this.md5}\nSHA1: ${this.sha1}\nSHA256: ${this.sha256}"
         )
     )
-}
-
-fun List<UsersModel>.toDetailsUiModels(): List<DetailsUiModel> {
-    return this.map { it.toDetailsUiModel() }
 }

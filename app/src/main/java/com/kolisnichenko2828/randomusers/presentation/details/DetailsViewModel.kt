@@ -21,29 +21,35 @@ class DetailsViewModel @Inject constructor(
 
     fun setEvent(event: DetailsContract.Event) {
         when (event) {
-            is DetailsContract.Event.LoadUser -> loadUserDetails(event.userId)
+            is DetailsContract.Event.LoadUser -> loadUserDetails(event.uuid)
         }
     }
 
-    private fun loadUserDetails(userId: String) {
-        if (_uiState.value.isLoading || _uiState.value.userDetails?.id == userId) return
+    private fun loadUserDetails(uuid: String) {
+        if (_uiState.value.isLoading || _uiState.value.userDetails?.uuid == uuid) return
 
         _uiState.update { it.copy(isLoading = true, error = null) }
 
         viewModelScope.launch {
-            val result = repository.getUserById(userId)
+            val result = repository.getUserById(uuid)
 
             result.fold(
                 onSuccess = { usersModel ->
                     val uiModel = usersModel.toDetailsUiModel()
 
                     _uiState.update {
-                        it.copy(isLoading = false, userDetails = uiModel)
+                        it.copy(
+                            isLoading = false,
+                            userDetails = uiModel
+                        )
                     }
                 },
                 onFailure = { error ->
                     _uiState.update {
-                        it.copy(isLoading = false, error = error.message ?: "Loading Error")
+                        it.copy(
+                            isLoading = false,
+                            error = error
+                        )
                     }
                 }
             )

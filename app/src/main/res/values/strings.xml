@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">Random Users</string>
+    <string name="unknown_error">Unknown Error</string>
+    <string name="retry">Retry</string>
+    <string name="nothing_found">Nothing Found</string>
+    <string name="error_unknown">Unknown Error</string>
+    <string name="error_no_internet">No internet connection.\nPlease check your network.</string>
+    <string name="error_rate_limit">Too many requests.\nPlease try again later.</string>
+    <string name="error_timeout">Request timed out.\nPlease try again.</string>
+    <string name="error_server">Server error occurred.\nPlease try again.</string>
+    <string name="icon_warning_content_description">Warning icon</string>
 </resources>

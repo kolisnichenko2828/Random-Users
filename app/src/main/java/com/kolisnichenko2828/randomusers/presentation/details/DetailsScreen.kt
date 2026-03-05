@@ -12,11 +12,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.kolisnichenko2828.randomusers.core.toUserReadableMessage
 import com.kolisnichenko2828.randomusers.presentation.details.components.DetailsContent
 
 @Composable
 fun DetailsScreen(
-    userId: String,
+    uuid: String,
     viewModel: DetailsViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -24,7 +25,7 @@ fun DetailsScreen(
 
     LaunchedEffect(Unit) {
         viewModel.setEvent(
-            event = DetailsContract.Event.LoadUser(userId)
+            event = DetailsContract.Event.LoadUser(uuid)
         )
     }
 
@@ -38,9 +39,12 @@ fun DetailsScreen(
             }
         }
         currentState.error != null -> {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
                 Text(
-                    text = "Error: ${uiState.error}",
+                    text = currentState.error.toUserReadableMessage(),
                     color = MaterialTheme.colorScheme.error
                 )
             }

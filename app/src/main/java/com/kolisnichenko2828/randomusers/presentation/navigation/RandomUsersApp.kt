@@ -24,14 +24,14 @@ fun RandomUsersApp(
         entryProvider = entryProvider {
             entry<Screen.Users> {
                 UsersScreen(
-                    onUserClick = { id ->
-                        backStack.add(Screen.Details(userId = id))
+                    onUserClick = { uuid ->
+                        backStack.add(Screen.Details(uuid = uuid))
                     }
                 )
             }
             entry<Screen.Details> {
                 DetailsScreen(
-                    userId = it.userId,
+                    uuid = it.uuid,
                 )
             }
         }
@@ -42,5 +42,5 @@ sealed interface Screen : Parcelable {
     @Parcelize
     object Users : Screen
     @Parcelize
-    data class Details(val userId: String) : Screen
+    data class Details(val uuid: String) : Screen
 }

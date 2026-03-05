@@ -4,7 +4,7 @@ import androidx.compose.runtime.Immutable
 
 @Immutable
 data class DetailsUiModel(
-    val id: String,
+    val uuid: String,
     val header: HeaderUiModel,
     val contactInfo: ContactInfoUiModel,
     val location: LocationUiModel,
