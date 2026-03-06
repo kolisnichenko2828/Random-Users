@@ -45,7 +45,7 @@ fun UsersContent(
                 onClick = onUserClick
             )
 
-            LaunchedEffect(users.size) {
+            LaunchedEffect(index) {
                 if (index >= users.size - 10 && !isLoadingNext && isError == null) {
                     onLoadNext()
                 }

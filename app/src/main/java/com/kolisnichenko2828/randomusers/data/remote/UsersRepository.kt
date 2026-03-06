@@ -37,8 +37,7 @@ class UsersRepository @Inject constructor(
                     },
                     onFailure = {
                         if (remoteException is CancellationException) throw remoteException
-                        val currentException = AppException.DatabaseError()
-                        return Result.failure(currentException)
+                        return Result.failure(AppException.DatabaseError())
                     }
                 )
             }
