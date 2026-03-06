@@ -12,6 +12,7 @@
 - **Dependency Injection:** Dagger Hilt
 - **Storage**: Room
 - **Network**: Retrofit, Coil
+- **Pagination**: Jetpack Paging 3
 
 ### 📥 Build App
 
