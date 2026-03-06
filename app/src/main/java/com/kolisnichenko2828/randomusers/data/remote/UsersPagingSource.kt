@@ -32,19 +32,6 @@ class UsersPagingSource(
                 nextKey = if (response.isEmpty()) null else offset + limit
             )
         } catch (e: Exception) {
-            val appException = when (e) {
-                is SocketTimeoutException -> AppException.Timeout(e)
-                is IOException -> AppException.NoInternetConnection(e)
-                is HttpException -> {
-                    when (e.code()) {
-                        429 -> AppException.RateLimitExceeded(e)
-                        in 500..599 -> AppException.ServerError(e)
-                        else -> AppException.Unknown(e)
-                    }
-                }
-                else -> AppException.Unknown(e)
-            }
-
             val localUsers = database.usersDao().getUsers(
                 limit = limit,
                 offset = offset
@@ -57,12 +44,27 @@ class UsersPagingSource(
                     nextKey = if (localUsers.size < limit) null else offset + limit
                 )
             } else {
-                LoadResult.Error(appException)
+                LoadResult.Error(getRemoteException(e))
             }
         }
     }
 
     override fun getRefreshKey(state: PagingState<Int, UsersModel>): Int? {
         return null
+    }
+
+    private fun getRemoteException(e: Exception): AppException {
+        return when (e) {
+            is SocketTimeoutException -> AppException.Timeout(e)
+            is IOException -> AppException.NoInternetConnection(e)
+            is HttpException -> {
+                when (e.code()) {
+                    429 -> AppException.RateLimitExceeded(e)
+                    in 500..599 -> AppException.ServerError(e)
+                    else -> AppException.Unknown(e)
+                }
+            }
+            else -> AppException.Unknown(e)
+        }
     }
 }
