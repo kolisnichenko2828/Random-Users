@@ -10,6 +10,7 @@ import com.kolisnichenko2828.randomusers.domain.UsersModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
+import java.util.concurrent.CancellationException
 import javax.inject.Inject
 
 class UsersRepository @Inject constructor(
@@ -30,12 +31,17 @@ class UsersRepository @Inject constructor(
 
     suspend fun getUserById(uuid: String): Result<UsersModel> {
         return withContext(Dispatchers.IO) {
-            val entity = database.usersDao().getUserById(uuid)
+            try {
+                val entity = database.usersDao().getUserById(uuid)
 
-            if (entity != null) {
-                Result.success(entity.toDomain())
-            } else {
-                Result.failure(AppException.Unknown())
+                if (entity != null) {
+                    Result.success(entity.toDomain())
+                } else {
+                    Result.failure(AppException.Unknown())
+                }
+            } catch (e: Exception) {
+                if (e is CancellationException) throw e
+                Result.failure(AppException.DatabaseError(e))
             }
         }
     }
