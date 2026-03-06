@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
@@ -7,6 +9,13 @@ plugins {
     id("kotlin-parcelize")
 }
 
+val localProps = Properties()
+val localPropertiesFile = File(rootProject.rootDir,"local.properties")
+if (localPropertiesFile.exists() && localPropertiesFile.isFile) {
+    localPropertiesFile.inputStream().use {
+        localProps.load(it)
+    }
+}
 android {
     namespace = "com.kolisnichenko2828.randomusers"
     compileSdk {
@@ -27,10 +36,25 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
+            )
+            buildConfigField(
+                "String",
+                "RANDOM_API",
+                "\"${localProps.getProperty("RANDOM_API")}\""
+            )
+        }
+        debug {
+            isMinifyEnabled = false
+            isShrinkResources = false
+            buildConfigField(
+                "String",
+                "RANDOM_API",
+                "\"${localProps.getProperty("RANDOM_API")}\""
             )
         }
     }
@@ -40,6 +64,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
