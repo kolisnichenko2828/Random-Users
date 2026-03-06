@@ -95,9 +95,6 @@ dependencies {
     implementation(libs.androidx.material3.adaptive.navigation3)
     // splash
     implementation(libs.androidx.core.splashscreen)
-    // paging 3
-    implementation(libs.androidx.paging.runtime)
-    implementation(libs.androidx.paging.compose)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

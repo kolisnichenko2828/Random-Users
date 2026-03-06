@@ -19,13 +19,7 @@ class DetailsViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(DetailsContract.State())
     val uiState: StateFlow<DetailsContract.State> = _uiState.asStateFlow()
 
-    fun setEvent(event: DetailsContract.Event) {
-        when (event) {
-            is DetailsContract.Event.LoadUser -> loadUserDetails(event.uuid)
-        }
-    }
-
-    private fun loadUserDetails(uuid: String) {
+    fun loadUserDetails(uuid: String) {
         if (_uiState.value.isLoading || _uiState.value.userDetails?.uuid == uuid) return
 
         _uiState.update { it.copy(isLoading = true, error = null) }

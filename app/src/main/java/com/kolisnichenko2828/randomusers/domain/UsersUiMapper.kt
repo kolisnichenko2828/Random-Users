@@ -10,3 +10,7 @@ fun UsersModel.toItemUiModel(): UsersUiModel {
             .joinToString(" "),
     )
 }
+
+fun List<UsersModel>.toItemUiModels(): List<UsersUiModel> {
+    return this.map { it.toItemUiModel() }
+}

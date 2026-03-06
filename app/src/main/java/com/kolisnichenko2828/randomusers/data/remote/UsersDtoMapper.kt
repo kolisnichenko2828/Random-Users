@@ -51,6 +51,6 @@ fun UsersDto.toUserEntity(): UsersEntity {
     )
 }
 
-fun List<UsersDto>.toUserEntities(): List<UsersEntity> {
+fun List<UsersDto>.toUsersEntities(): List<UsersEntity> {
     return this.map { it.toUserEntity() }
 }
