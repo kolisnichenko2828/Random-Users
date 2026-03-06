@@ -1,6 +1,9 @@
 package com.kolisnichenko2828.randomusers.presentation.navigation
 
 import android.os.Parcelable
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -12,30 +15,32 @@ import com.kolisnichenko2828.randomusers.presentation.users.UsersScreen
 import kotlinx.parcelize.Parcelize
 
 @Composable
-fun RandomUsersApp(
-    modifier: Modifier = Modifier
-) {
+fun RandomUsersApp() {
     val backStack = rememberSaveable { mutableStateListOf<Screen>(Screen.Users) }
 
-    NavDisplay(
-        modifier = modifier,
-        backStack = backStack,
-        onBack = { backStack.removeLastOrNull() },
-        entryProvider = entryProvider {
-            entry<Screen.Users> {
-                UsersScreen(
-                    onUserClick = { uuid ->
-                        backStack.add(Screen.Details(uuid = uuid))
-                    }
-                )
+    Scaffold(
+        modifier = Modifier.fillMaxSize()
+    ) { innerPadding ->
+        NavDisplay(
+            modifier = Modifier.padding(innerPadding),
+            backStack = backStack,
+            onBack = { backStack.removeLastOrNull() },
+            entryProvider = entryProvider {
+                entry<Screen.Users> {
+                    UsersScreen(
+                        onUserClick = { uuid ->
+                            backStack.add(Screen.Details(uuid = uuid))
+                        }
+                    )
+                }
+                entry<Screen.Details> {
+                    DetailsScreen(
+                        uuid = it.uuid
+                    )
+                }
             }
-            entry<Screen.Details> {
-                DetailsScreen(
-                    uuid = it.uuid,
-                )
-            }
-        }
-    )
+        )
+    }
 }
 
 sealed interface Screen : Parcelable {

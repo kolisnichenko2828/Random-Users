@@ -2,9 +2,7 @@ package com.kolisnichenko2828.randomusers.presentation.users.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
@@ -31,21 +29,19 @@ fun ErrorMessage(
             .fillMaxSize()
             .padding(32.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically)
     ) {
         Icon(
             painter = painterResource(R.drawable.warning_24px),
             contentDescription = stringResource(R.string.icon_warning_content_description),
             modifier = Modifier.size(64.dp),
         )
-        Spacer(modifier = Modifier.height(16.dp))
         Text(
             text = errorMessage,
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.error,
             textAlign = TextAlign.Center
         )
-        Spacer(modifier = Modifier.height(16.dp))
         Button(onClick = onRetry) {
             Icon(
                 painter = painterResource(R.drawable.refresh_24px),

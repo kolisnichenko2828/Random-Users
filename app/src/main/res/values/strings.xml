@@ -2,6 +2,7 @@
     <string name="app_name">Random Users</string>
     <string name="unknown_error">Unknown Error</string>
     <string name="retry">Retry</string>
+    <string name="back">Back</string>
     <string name="nothing_found">Nothing Found</string>
     <string name="error_unknown">Unknown Error</string>
     <string name="error_no_internet">No internet connection.\nPlease check your network.</string>

@@ -15,9 +15,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun InfoSectionCard(title: String, items: List<Pair<String, String>>) {
+fun InfoSectionCard(
+    title: String,
+    items: List<Pair<String, String>>,
+    modifier: Modifier = Modifier
+) {
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier,
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
@@ -40,13 +44,11 @@ fun InfoSectionCard(title: String, items: List<Pair<String, String>>) {
                         text = label,
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.weight(1f)
                     )
                     Text(
                         text = value,
                         style = MaterialTheme.typography.bodyMedium,
                         fontWeight = FontWeight.Medium,
-                        modifier = Modifier.weight(2f),
                         textAlign = androidx.compose.ui.text.style.TextAlign.End
                     )
                 }

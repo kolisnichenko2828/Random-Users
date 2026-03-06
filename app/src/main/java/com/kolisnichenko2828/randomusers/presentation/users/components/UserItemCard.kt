@@ -18,10 +18,11 @@ import com.kolisnichenko2828.randomusers.presentation.users.UsersUiModel
 @Composable
 fun UserItemCard(
     user: UsersUiModel,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Card(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .clickable { onClick() },
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
