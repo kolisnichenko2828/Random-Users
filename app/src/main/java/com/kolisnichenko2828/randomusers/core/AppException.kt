@@ -16,7 +16,7 @@ sealed class AppException(cause: Throwable? = null) : Exception(cause) {
 @Composable
 fun Throwable.toUserReadableMessage(): String {
     return when (this) {
-        is AppException.DatabaseError -> ""
+        is AppException.DatabaseError -> stringResource(R.string.database_error)
         is AppException.NoInternetConnection -> stringResource(R.string.error_no_internet)
         is AppException.RateLimitExceeded -> stringResource(R.string.error_rate_limit)
         is AppException.ServerError -> stringResource(R.string.error_server)
