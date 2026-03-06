@@ -6,6 +6,7 @@ import androidx.compose.runtime.Immutable
 data class DetailsUiModel(
     val uuid: String,
     val header: HeaderUiModel,
+    val accountInfo: AccountUiModel,
     val contactInfo: ContactInfoUiModel,
     val location: LocationUiModel,
     val workInfo: WorkUiModel,
@@ -17,8 +18,18 @@ data class DetailsUiModel(
 data class HeaderUiModel(
     val avatarUrl: String,
     val fullName: String,
-    val dobAndAge: String,
+    val dob: String,
+    val age: Int,
     val gender: String
+)
+
+@Immutable
+data class AccountUiModel(
+    val id: String,
+    val username: String,
+    val password: String,
+    val url: String,
+    val domain: String
 )
 
 @Immutable
@@ -30,7 +41,11 @@ data class ContactInfoUiModel(
 
 @Immutable
 data class LocationUiModel(
-    val fullAddress: String,
+    val country: String,
+    val state: String,
+    val city: String,
+    val streetAddress: String,
+    val postalCode: String,
     val coordinates: String,
     val timezone: String
 )
@@ -52,8 +67,11 @@ data class PaymentUiModel(
 @Immutable
 data class TechnicalDataUiModel(
     val uuid: String,
-    val ipAddress: String,
+    val ipv4: String,
+    val ipv6: String,
     val macAddress: String,
     val userAgent: String,
-    val hashes: String
+    val md5: String,
+    val sha1: String,
+    val sha256: String,
 )

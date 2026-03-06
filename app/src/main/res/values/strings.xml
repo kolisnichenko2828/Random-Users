@@ -9,4 +9,48 @@
     <string name="error_timeout">Request timed out.\nPlease try again.</string>
     <string name="error_server">Server error occurred.\nPlease try again.</string>
     <string name="icon_warning_content_description">Warning icon</string>
+
+    <string name="user_avatar">User Avatar</string>
+
+    <string name="title_account">Account</string>
+    <string name="title_contacts">Contacts</string>
+    <string name="title_location">Location</string>
+    <string name="title_work">Work</string>
+    <string name="title_payment">Payment</string>
+    <string name="title_technical">Technical</string>
+
+    <string name="item_id">ID</string>
+    <string name="item_username">Username</string>
+    <string name="item_password">Password</string>
+    <string name="item_url">URL</string>
+    <string name="item_domain">Domain</string>
+
+    <string name="item_email">Email</string>
+    <string name="item_phone">Phone</string>
+    <string name="item_cell">Cell</string>
+
+    <string name="item_country">Country</string>
+    <string name="item_state">State</string>
+    <string name="item_city">City</string>
+    <string name="item_street">Street</string>
+    <string name="item_postal_code">Postal Code</string>
+    <string name="item_coordinates">Coordinates</string>
+    <string name="item_time_zone">Time Zone</string>
+
+    <string name="item_company">Company</string>
+    <string name="item_job_title">Job Title</string>
+    <string name="item_company_email">Company Email</string>
+
+    <string name="item_ssn">SSN</string>
+    <string name="item_credit_card">Credit card</string>
+    <string name="item_iban">IBAN</string>
+
+    <string name="item_uuid">UUID</string>
+    <string name="item_mac">MAC</string>
+    <string name="item_user_agent">User Agent</string>
+    <string name="item_ipv4">IPv4</string>
+    <string name="item_ipv6">IPv6</string>
+    <string name="item_md5">MD5</string>
+    <string name="item_sha1">SHA1</string>
+    <string name="item_sha256">SHA256</string>
 </resources>

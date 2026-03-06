@@ -1,5 +1,6 @@
 package com.kolisnichenko2828.randomusers.domain
 
+import com.kolisnichenko2828.randomusers.presentation.details.AccountUiModel
 import com.kolisnichenko2828.randomusers.presentation.details.ContactInfoUiModel
 import com.kolisnichenko2828.randomusers.presentation.details.DetailsUiModel
 import com.kolisnichenko2828.randomusers.presentation.details.HeaderUiModel
@@ -18,9 +19,18 @@ fun UsersModel.toDetailsUiModel(): DetailsUiModel {
                 .filter { it.isNotBlank() }
                 .joinToString(" "),
 
-            dobAndAge = "${this.dob} (${this.age} old)",
+            dob = this.dob,
+            age = this.age,
 
             gender = this.gender.replaceFirstChar { it.uppercase() }
+        ),
+
+        accountInfo = AccountUiModel(
+            id = this.id,
+            username = this.username,
+            password = this.password,
+            url = this.url,
+            domain = this.domain
         ),
 
         contactInfo = ContactInfoUiModel(
@@ -30,8 +40,12 @@ fun UsersModel.toDetailsUiModel(): DetailsUiModel {
         ),
 
         location = LocationUiModel(
-            fullAddress = "${this.streetAddress}, ${this.city}, ${this.state} ${this.postalCode}, ${this.country}",
-            coordinates = "Latitude: ${this.latitude}, Longitude: ${this.longitude}",
+            country = this.country,
+            state = this.state,
+            city = this.city,
+            streetAddress = this.streetAddress,
+            postalCode = this.postalCode,
+            coordinates = "${this.latitude}, ${this.longitude}",
             timezone = this.timezone
         ),
 
@@ -43,17 +57,19 @@ fun UsersModel.toDetailsUiModel(): DetailsUiModel {
 
         paymentInfo = PaymentUiModel(
             ssn = this.ssn,
-
             creditCard = this.creditCard,
             iban = this.iban
         ),
 
         technicalData = TechnicalDataUiModel(
             uuid = this.uuid,
-            ipAddress = "IPv4: ${this.ipv4}\nIPv6: ${this.ipv6}",
+            ipv4 = this.ipv4,
+            ipv6 = this.ipv6,
             macAddress = this.macAddress,
             userAgent = this.userAgent,
-            hashes = "MD5: ${this.md5}\nSHA1: ${this.sha1}\nSHA256: ${this.sha256}"
+            md5 = this.md5,
+            sha1 = this.sha1,
+            sha256 = this.sha256,
         )
     )
 }

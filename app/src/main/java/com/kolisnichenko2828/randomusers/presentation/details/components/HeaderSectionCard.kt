@@ -12,9 +12,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
+import com.kolisnichenko2828.randomusers.R
 import com.kolisnichenko2828.randomusers.presentation.details.HeaderUiModel
 
 @Composable
@@ -25,7 +27,7 @@ fun HeaderSectionCard(header: HeaderUiModel) {
     ) {
         AsyncImage(
             model = header.avatarUrl,
-            contentDescription = "user avatar",
+            contentDescription = stringResource(R.string.user_avatar),
             modifier = Modifier
                 .size(120.dp)
                 .clip(CircleShape)
@@ -38,7 +40,7 @@ fun HeaderSectionCard(header: HeaderUiModel) {
             fontWeight = FontWeight.Bold
         )
         Text(
-            text = "${header.gender}, ${header.dobAndAge}",
+            text = "${header.gender}, ${header.dob} (${header.age})",
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
