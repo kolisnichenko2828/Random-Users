@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -27,30 +28,38 @@ fun DetailsScreen(
         viewModel.setEvent(DetailsContract.Event.LoadUser(uuid))
     }
 
-    when {
-        currentState.isLoading -> {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                CircularProgressIndicator()
+    Surface(
+        modifier = Modifier.fillMaxSize(),
+        color = MaterialTheme.colorScheme.surface,
+        contentColor = MaterialTheme.colorScheme.onSurface
+    ) {
+        when {
+            currentState.isLoading -> {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator()
+                }
             }
-        }
-        currentState.error != null -> {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = currentState.error.toUserReadableMessage(),
-                    color = MaterialTheme.colorScheme.error
+
+            currentState.error != null -> {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = currentState.error.toUserReadableMessage(),
+                        color = MaterialTheme.colorScheme.error
+                    )
+                }
+            }
+
+            currentState.userDetails != null -> {
+                DetailsContent(
+                    uiModel = currentState.userDetails
                 )
             }
-        }
-        currentState.userDetails != null -> {
-            DetailsContent(
-                uiModel = currentState.userDetails
-            )
         }
     }
 }
