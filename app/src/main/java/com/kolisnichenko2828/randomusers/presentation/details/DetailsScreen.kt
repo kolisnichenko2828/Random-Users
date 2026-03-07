@@ -2,7 +2,6 @@ package com.kolisnichenko2828.randomusers.presentation.details
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -24,7 +23,7 @@ fun DetailsScreen(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val currentState = uiState
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(uuid) {
         viewModel.setEvent(DetailsContract.Event.LoadUser(uuid))
     }
 
@@ -34,15 +33,6 @@ fun DetailsScreen(
         contentColor = MaterialTheme.colorScheme.onSurface
     ) {
         when {
-            currentState.isLoading -> {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    CircularProgressIndicator()
-                }
-            }
-
             currentState.error != null -> {
                 Box(
                     modifier = Modifier.fillMaxSize(),
@@ -54,7 +44,6 @@ fun DetailsScreen(
                     )
                 }
             }
-
             currentState.userDetails != null -> {
                 DetailsContent(
                     uiModel = currentState.userDetails
