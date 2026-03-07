@@ -48,7 +48,9 @@ fun DetailsScreen(
             }
         }
         currentState.userDetails != null -> {
-            DetailsContent(uiModel = currentState.userDetails)
+            DetailsContent(
+                uiModel = currentState.userDetails
+            )
         }
     }
 }
