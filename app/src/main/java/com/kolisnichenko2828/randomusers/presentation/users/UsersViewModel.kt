@@ -3,7 +3,6 @@ package com.kolisnichenko2828.randomusers.presentation.users
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kolisnichenko2828.randomusers.data.remote.UsersRepository
-import com.kolisnichenko2828.randomusers.domain.UsersModel
 import com.kolisnichenko2828.randomusers.domain.toItemUiModels
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,78 +18,117 @@ class UsersViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(UsersContract.State())
     val uiState = _uiState.asStateFlow()
 
-    fun getUsers(
-        isRefreshing: Boolean = false,
-        isNext: Boolean = false,
-        limit: Int = 30
-    ) {
-        val currentState = _uiState.value
+    fun setEvent(event: UsersContract.Event) {
+        when (event) {
+            is UsersContract.Event.InitialLoad -> loadInitial()
+            is UsersContract.Event.LoadNext -> loadNext()
+            is UsersContract.Event.Refresh -> refresh()
+        }
+    }
 
-        if (isRefreshing && currentState.isRefreshing) return
-        if (isNext && currentState.isLoadingNext) return
-        if (!isRefreshing && !isNext && currentState.isLoadingInitial) return
+    private fun loadInitial(limit: Int = 30) {
+        val currentState = _uiState.value
+        if (currentState.isLoadingInitial) return
 
         viewModelScope.launch {
-            var usersResult: Result<List<UsersModel>>
-            when {
-                isRefreshing -> {
-                    _uiState.update {
-                        it.copy(
-                            error = null,
-                            isLoadingInitial = false,
-                            isLoadingNext = false,
-                            isRefreshing = true,
-                        )
-                    }
-                    usersResult = repository.getUsers(
-                        offset = 0,
-                        limit = limit
-                    )
-                }
-                isNext -> {
-                    _uiState.update {
-                        it.copy(
-                            error = null,
-                            isLoadingInitial = false,
-                            isLoadingNext = true,
-                            isRefreshing = false,
-                        )
-                    }
-                    usersResult = repository.getUsers(
-                        offset = currentState.users.size,
-                        limit = 30
-                    )
-                }
-                else -> {
-                    _uiState.update {
-                        it.copy(
-                            error = null,
-                            isLoadingInitial = true,
-                            isLoadingNext = false,
-                            isRefreshing = false,
-                        )
-                    }
-                    usersResult = repository.getUsers(
-                        offset = 0,
-                        limit = limit
-                    )
-                }
+            _uiState.update {
+                it.copy(
+                    error = null,
+                    isLoadingInitial = true,
+                    isLoadingNext = false,
+                    isRefreshing = false
+                )
             }
 
-            usersResult.fold(
+            val usersModels = repository.getUsers(
+                offset = 0,
+                limit = limit
+            )
+
+            usersModels.fold(
                 onSuccess = { users ->
                     _uiState.update {
-                        val currentUsers = if (isNext) {
-                            it.users + users.toItemUiModels()
-                        } else {
-                            users.toItemUiModels()
-                        }
-
                         it.copy(
-                            users = currentUsers,
+                            users = users.toItemUiModels(),
                             error = null,
-                            isLoadingInitial = false,
-                            isLoadingNext = false,
+                            isLoadingInitial = false
+                        )
+                    }
+                },
+                onFailure = { exception ->
+                    _uiState.update {
+                        it.copy(
+                            error = exception,
+                            isLoadingInitial = false
+                        )
+                    }
+                }
+            )
+        }
+    }
+
+    private fun loadNext(limit: Int = 30) {
+        val currentState = _uiState.value
+        if (currentState.isLoadingNext) return
+
+        viewModelScope.launch {
+            _uiState.update {
+                it.copy(
+                    error = null,
+                    isLoadingNext = true
+                )
+            }
+
+            val usersModels = repository.getUsers(
+                offset = currentState.users.size,
+                limit = limit
+            )
+
+            usersModels.fold(
+                onSuccess = { users ->
+                    _uiState.update {
+                        it.copy(
+                            users = it.users + users.toItemUiModels(),
+                            error = null,
+                            isLoadingNext = false
+                        )
+                    }
+                },
+                onFailure = { exception ->
+                    _uiState.update {
+                        it.copy(
+                            error = exception,
+                            isLoadingNext = false
+                        )
+                    }
+                }
+            )
+        }
+    }
+
+    fun refresh(limit: Int = 30) {
+        val currentState = _uiState.value
+        if (currentState.isRefreshing) return
+
+        viewModelScope.launch {
+            _uiState.update {
+                it.copy(
+                    error = null,
+                    isRefreshing = true
+                )
+            }
+
+            val usersModels = repository.getUsers(
+                offset = 0,
+                limit = limit
+            )
+
+            usersModels.fold(
+                onSuccess = { users ->
+                    _uiState.update {
+                        it.copy(
+                            users = users.toItemUiModels(),
+                            error = null,
                             isRefreshing = false,
                         )
                     }
@@ -99,9 +137,7 @@ class UsersViewModel @Inject constructor(
                     _uiState.update {
                         it.copy(
                             error = exception,
-                            isLoadingInitial = false,
-                            isLoadingNext = false,
-                            isRefreshing = false,
+                            isRefreshing = false
                         )
                     }
                 }

@@ -24,7 +24,7 @@ fun DetailsScreen(
     val currentState = uiState
 
     LaunchedEffect(Unit) {
-        viewModel.loadUserDetails(uuid)
+        viewModel.setEvent(DetailsContract.Event.LoadUser(uuid))
     }
 
     when {

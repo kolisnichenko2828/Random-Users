@@ -14,6 +14,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kolisnichenko2828.randomusers.R
@@ -31,13 +32,13 @@ fun UsersScreen(
 
     LaunchedEffect(Unit) {
         if (currentState.users.isEmpty()) {
-            viewModel.getUsers()
+            viewModel.setEvent(UsersContract.Event.InitialLoad())
         }
     }
 
     PullToRefreshBox(
         isRefreshing = currentState.isRefreshing,
-        onRefresh = { viewModel.getUsers(isRefreshing = true) },
+        onRefresh = { viewModel.setEvent(UsersContract.Event.Refresh()) },
         modifier = Modifier.fillMaxSize()
     ) {
         when {
@@ -54,7 +55,7 @@ fun UsersScreen(
             currentState.error != null && uiState.users.isEmpty() -> {
                 ErrorMessage(
                     errorMessage = currentState.error.toUserReadableMessage(),
-                    onRetry = { viewModel.getUsers() }
+                    onRetry = { viewModel.setEvent(UsersContract.Event.InitialLoad()) }
                 )
             }
             currentState.users.isNotEmpty() -> {
@@ -62,16 +63,23 @@ fun UsersScreen(
                     users = currentState.users,
                     isLoadingNext = currentState.isLoadingNext,
                     isError = currentState.error?.toUserReadableMessage(),
-                    onLoadNext = { viewModel.getUsers(isNext = true) },
+                    onLoadNext = { viewModel.setEvent(UsersContract.Event.LoadNext()) },
                     onUserClick = onUserClick,
                 )
             }
             else -> {
-                Text(
-                    text = stringResource(R.string.nothing_found),
-                    style = MaterialTheme.typography.bodyLarge,
-                    modifier = Modifier.verticalScroll(rememberScrollState())
-                )
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .verticalScroll(rememberScrollState()),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Text(
+                        text = stringResource(R.string.nothing_found),
+                        style = MaterialTheme.typography.bodyLarge,
+                        textAlign = TextAlign.Center
+                    )
+                }
             }
         }
     }

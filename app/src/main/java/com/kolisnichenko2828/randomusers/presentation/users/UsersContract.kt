@@ -9,4 +9,10 @@ interface UsersContract {
         val isLoadingNext: Boolean = false,
         val isRefreshing: Boolean = false,
     )
+
+    sealed interface Event {
+        class InitialLoad : Event
+        class LoadNext : Event
+        class Refresh : Event
+    }
 }
