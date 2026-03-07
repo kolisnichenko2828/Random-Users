@@ -35,8 +35,8 @@ class UsersRepository @Inject constructor(
                             return Result.failure(getRemoteException(remoteException))
                         }
                     },
-                    onFailure = {
-                        if (remoteException is CancellationException) throw remoteException
+                    onFailure = { localException ->
+                        if (localException is CancellationException) throw localException
                         return Result.failure(AppException.DatabaseError())
                     }
                 )
