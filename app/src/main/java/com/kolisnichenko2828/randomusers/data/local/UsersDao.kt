@@ -8,7 +8,7 @@ import androidx.room.Query
 @Dao
 interface UsersDao {
     @Query("SELECT * FROM users ORDER BY localId ASC LIMIT :limit OFFSET :offset")
-    suspend fun getUsers(limit: Int, offset: Int): List<UsersEntity>
+    suspend fun getUsers(offset: Int, limit: Int): List<UsersEntity>
 
     @Query("SELECT * FROM users WHERE uuid = :uuid LIMIT 1")
     suspend fun getUserById(uuid: String): UsersEntity?

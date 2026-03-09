@@ -11,15 +11,12 @@ import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import androidx.paging.LoadState
-import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kolisnichenko2828.randomusers.R
 import com.kolisnichenko2828.randomusers.core.toUserReadableMessage
 import com.kolisnichenko2828.randomusers.presentation.users.components.ErrorMessage
@@ -30,26 +27,22 @@ fun UsersScreen(
     onUserClick: (String) -> Unit,
     viewModel: UsersViewModel = hiltViewModel()
 ) {
-    val users = viewModel.usersFlow.collectAsLazyPagingItems()
-    var isRefreshing by rememberSaveable { mutableStateOf(false) }
-    val pagingState = users.loadState.refresh
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val currentState = uiState
 
-    LaunchedEffect(pagingState) {
-        if (pagingState !is LoadState.Loading) {
-            isRefreshing = false
+    LaunchedEffect(Unit) {
+        if (currentState.users.isEmpty()) {
+            viewModel.setEvent(UsersContract.Event.InitialLoad())
         }
     }
 
     PullToRefreshBox(
-        isRefreshing = isRefreshing,
-        onRefresh = {
-            isRefreshing = true
-            users.refresh()
-        },
+        isRefreshing = currentState.isRefreshing,
+        onRefresh = { viewModel.setEvent(UsersContract.Event.Refresh()) },
         modifier = Modifier.fillMaxSize()
     ) {
-        when (pagingState) {
-            is LoadState.Loading if !isRefreshing -> {
+        when {
+            currentState.isLoadingInitial -> {
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
@@ -59,32 +52,33 @@ fun UsersScreen(
                     CircularProgressIndicator()
                 }
             }
-
-            is LoadState.Error -> {
-                if (users.itemCount == 0) {
-                    ErrorMessage(
-                        errorMessage = pagingState.error.toUserReadableMessage(),
-                        onRetry = { users.retry() }
-                    )
-                } else {
-                    UsersContent(
-                        users = users,
-                        onUserClick = { onUserClick(it) }
-                    )
-                }
+            currentState.error != null && uiState.users.isEmpty() -> {
+                ErrorMessage(
+                    errorMessage = currentState.error.toUserReadableMessage(),
+                    onRetry = { viewModel.setEvent(UsersContract.Event.InitialLoad()) }
+                )
             }
-
+            currentState.users.isNotEmpty() -> {
+                UsersContent(
+                    users = currentState.users,
+                    isLoadingNext = currentState.isLoadingNext,
+                    isError = currentState.error?.toUserReadableMessage(),
+                    onItemVisible = { viewModel.setEvent(UsersContract.Event.OnItemVisible(it)) },
+                    onLoadNext = { viewModel.setEvent(UsersContract.Event.LoadNext()) },
+                    onUserClick = onUserClick,
+                )
+            }
             else -> {
-                if (users.itemCount == 0 && pagingState is LoadState.NotLoading) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .verticalScroll(rememberScrollState()),
+                    contentAlignment = Alignment.Center,
+                ) {
                     Text(
                         text = stringResource(R.string.nothing_found),
                         style = MaterialTheme.typography.bodyLarge,
-                        modifier = Modifier.verticalScroll(rememberScrollState())
-                    )
-                } else {
-                    UsersContent(
-                        users = users,
-                        onUserClick = { onUserClick(it) }
+                        textAlign = TextAlign.Center
                     )
                 }
             }

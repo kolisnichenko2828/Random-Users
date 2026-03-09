@@ -10,9 +10,11 @@
     <string name="error_timeout">Request timed out.\nPlease try again.</string>
     <string name="error_server">Server error.\nPlease try again.</string>
     <string name="icon_warning_content_description">Warning icon</string>
-    <string name="database_error">Database error.\nPlease reinstall app. </string>
+    <string name="database_error">Database error.\nPlease reinstall app.</string>
 
     <string name="user_avatar">User Avatar</string>
+
+    <string name="select_user">Select a user to view details.</string>
 
     <string name="title_account">Account</string>
     <string name="title_contacts">Contacts</string>

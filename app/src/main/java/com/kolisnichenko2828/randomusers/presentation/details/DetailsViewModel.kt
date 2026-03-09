@@ -26,9 +26,9 @@ class DetailsViewModel @Inject constructor(
     }
 
     private fun loadUserDetails(uuid: String) {
-        if (_uiState.value.isLoading || _uiState.value.userDetails?.uuid == uuid) return
+        if (_uiState.value.userDetails?.uuid == uuid) return
 
-        _uiState.update { it.copy(isLoading = true, error = null) }
+        _uiState.update { it.copy(error = null) }
 
         viewModelScope.launch {
             val result = repository.getUserById(uuid)
@@ -39,7 +39,6 @@ class DetailsViewModel @Inject constructor(
 
                     _uiState.update {
                         it.copy(
-                            isLoading = false,
                             userDetails = uiModel
                         )
                     }
@@ -47,7 +46,6 @@ class DetailsViewModel @Inject constructor(
                 onFailure = { error ->
                     _uiState.update {
                         it.copy(
-                            isLoading = false,
                             error = error
                         )
                     }

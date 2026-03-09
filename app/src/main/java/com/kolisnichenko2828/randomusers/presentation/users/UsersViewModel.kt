@@ -2,23 +2,152 @@ package com.kolisnichenko2828.randomusers.presentation.users
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.cachedIn
-import androidx.paging.map
 import com.kolisnichenko2828.randomusers.data.remote.UsersRepository
-import com.kolisnichenko2828.randomusers.domain.toItemUiModel
+import com.kolisnichenko2828.randomusers.domain.toItemUiModels
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class UsersViewModel @Inject constructor(
-    repository: UsersRepository
+    private val repository: UsersRepository
 ) : ViewModel() {
-    val usersFlow = repository.getUsers()
-        .map { pagingData ->
-            pagingData.map { userModel ->
-                userModel.toItemUiModel()
-            }
+    private val _uiState = MutableStateFlow(UsersContract.State())
+    val uiState = _uiState.asStateFlow()
+
+    fun setEvent(event: UsersContract.Event) {
+        when (event) {
+            is UsersContract.Event.InitialLoad -> loadInitial()
+            is UsersContract.Event.Refresh -> refresh()
+            is UsersContract.Event.OnItemVisible -> checkIndex(event.index)
+            is UsersContract.Event.LoadNext -> loadNext()
         }
-        .cachedIn(viewModelScope)
+    }
+
+    private fun loadInitial(limit: Int = 30) {
+        val currentState = _uiState.value
+        if (currentState.isLoadingInitial) return
+
+        viewModelScope.launch {
+            _uiState.update {
+                it.copy(
+                    error = null,
+                    isLoadingInitial = true,
+                    isLoadingNext = false,
+                    isRefreshing = false
+                )
+            }
+
+            val usersModels = repository.getUsers(
+                offset = 0,
+                limit = limit
+            )
+
+            usersModels.fold(
+                onSuccess = { users ->
+                    _uiState.update {
+                        it.copy(
+                            users = users.toItemUiModels(),
+                            error = null,
+                            isLoadingInitial = false
+                        )
+                    }
+                },
+                onFailure = { exception ->
+                    _uiState.update {
+                        it.copy(
+                            error = exception,
+                            isLoadingInitial = false
+                        )
+                    }
+                }
+            )
+        }
+    }
+
+    private fun checkIndex(index: Int) {
+        val threshold = _uiState.value.users.size - 10
+        if (index == threshold) loadNext()
+    }
+
+    private fun loadNext(limit: Int = 30) {
+        val currentState = _uiState.value
+        if (currentState.isLoadingNext) return
+
+        viewModelScope.launch {
+            _uiState.update {
+                it.copy(
+                    error = null,
+                    isLoadingNext = true
+                )
+            }
+
+            val usersModels = repository.getUsers(
+                offset = currentState.users.size,
+                limit = limit
+            )
+
+            usersModels.fold(
+                onSuccess = { users ->
+                    _uiState.update {
+                        it.copy(
+                            users = it.users + users.toItemUiModels(),
+                            error = null,
+                            isLoadingNext = false
+                        )
+                    }
+                },
+                onFailure = { exception ->
+                    _uiState.update {
+                        it.copy(
+                            error = exception,
+                            isLoadingNext = false
+                        )
+                    }
+                }
+            )
+        }
+    }
+
+    fun refresh(limit: Int = 30) {
+        val currentState = _uiState.value
+        if (currentState.isRefreshing) return
+
+        viewModelScope.launch {
+            _uiState.update {
+                it.copy(
+                    error = null,
+                    isRefreshing = true
+                )
+            }
+
+            val usersModels = repository.getUsers(
+                offset = 0,
+                limit = limit
+            )
+
+            usersModels.fold(
+                onSuccess = { users ->
+                    _uiState.update {
+                        it.copy(
+                            users = users.toItemUiModels(),
+                            error = null,
+                            isRefreshing = false,
+                        )
+                    }
+                },
+                onFailure = { exception ->
+                    _uiState.update {
+                        it.copy(
+                            error = exception,
+                            isRefreshing = false
+                        )
+                    }
+                }
+            )
+        }
+    }
 }

@@ -5,12 +5,12 @@ import androidx.compose.ui.res.stringResource
 import com.kolisnichenko2828.randomusers.R
 
 sealed class AppException(cause: Throwable? = null) : Exception(cause) {
-    class DatabaseError(cause: Throwable? = null) : AppException(cause)
-    class NoInternetConnection(cause: Throwable? = null) : AppException(cause)
-    class RateLimitExceeded(cause: Throwable? = null) : AppException(cause)
-    class ServerError(cause: Throwable? = null) : AppException(cause)
-    class Timeout(cause: Throwable? = null) : AppException(cause)
-    class Unknown(cause: Throwable? = null) : AppException(cause)
+    class DatabaseError : AppException()
+    class NoInternetConnection : AppException()
+    class RateLimitExceeded : AppException()
+    class ServerError : AppException()
+    class Timeout : AppException()
+    class Unknown : AppException()
 }
 
 @Composable
