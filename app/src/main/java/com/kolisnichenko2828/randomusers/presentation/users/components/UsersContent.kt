@@ -28,6 +28,7 @@ fun UsersContent(
     users: List<UsersUiModel>,
     isLoadingNext: Boolean,
     isError: String?,
+    onItemVisible: (Int) -> Unit,
     onLoadNext: () -> Unit,
     onUserClick: (String) -> Unit
 ) {
@@ -46,9 +47,7 @@ fun UsersContent(
             )
 
             LaunchedEffect(index) {
-                if (index >= users.size - 10 && !isLoadingNext && isError == null) {
-                    onLoadNext()
-                }
+                onItemVisible(index)
             }
         }
 

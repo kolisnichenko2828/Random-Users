@@ -12,7 +12,8 @@ interface UsersContract {
 
     sealed interface Event {
         class InitialLoad : Event
-        class LoadNext : Event
         class Refresh : Event
+        class OnItemVisible(val index: Int) : Event
+        class LoadNext : Event
     }
 }

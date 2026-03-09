@@ -21,8 +21,9 @@ class UsersViewModel @Inject constructor(
     fun setEvent(event: UsersContract.Event) {
         when (event) {
             is UsersContract.Event.InitialLoad -> loadInitial()
-            is UsersContract.Event.LoadNext -> loadNext()
             is UsersContract.Event.Refresh -> refresh()
+            is UsersContract.Event.OnItemVisible -> checkIndex(event.index)
+            is UsersContract.Event.LoadNext -> loadNext()
         }
     }
 
@@ -65,6 +66,11 @@ class UsersViewModel @Inject constructor(
                 }
             )
         }
+    }
+
+    private fun checkIndex(index: Int) {
+        val threshold = _uiState.value.users.size - 10
+        if (index == threshold) loadNext()
     }
 
     private fun loadNext(limit: Int = 30) {

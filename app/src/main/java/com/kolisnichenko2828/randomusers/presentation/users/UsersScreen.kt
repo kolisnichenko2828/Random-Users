@@ -63,6 +63,7 @@ fun UsersScreen(
                     users = currentState.users,
                     isLoadingNext = currentState.isLoadingNext,
                     isError = currentState.error?.toUserReadableMessage(),
+                    onItemVisible = { viewModel.setEvent(UsersContract.Event.OnItemVisible(it)) },
                     onLoadNext = { viewModel.setEvent(UsersContract.Event.LoadNext()) },
                     onUserClick = onUserClick,
                 )
