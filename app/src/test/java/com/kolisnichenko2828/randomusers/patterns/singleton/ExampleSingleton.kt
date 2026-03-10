@@ -49,6 +49,31 @@ private class ExampleLazyCompanion2 private constructor() {
     }
 }
 
+private class ExampleLazyCompanion3 private constructor() {
+    fun getUsers() {
+        println("list of users")
+    }
+
+    companion object {
+        @Volatile
+        private var instance: ExampleLazyCompanion3? = null
+        private val lock = Any()
+
+        fun getInstance(): ExampleLazyCompanion3 {
+            instance?.let { return it }
+
+            synchronized(lock) {
+                if (instance != null) {
+                    return instance!!
+                } else {
+                    instance = ExampleLazyCompanion3()
+                    return instance!!
+                }
+            }
+        }
+    }
+}
+
 class SingletonTest {
     @Test
     fun main() {
