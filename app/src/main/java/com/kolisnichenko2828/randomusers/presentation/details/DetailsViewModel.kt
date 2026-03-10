@@ -2,8 +2,8 @@ package com.kolisnichenko2828.randomusers.presentation.details
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.kolisnichenko2828.randomusers.data.remote.UsersRepository
-import com.kolisnichenko2828.randomusers.domain.toDetailsUiModel
+import com.kolisnichenko2828.randomusers.domain.interfaces.UsersDetailsFetcher
+import com.kolisnichenko2828.randomusers.domain.mappers.toDetailsUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DetailsViewModel @Inject constructor(
-    private val repository: UsersRepository
+    private val repository: UsersDetailsFetcher
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(DetailsContract.State())
     val uiState: StateFlow<DetailsContract.State> = _uiState.asStateFlow()
@@ -31,7 +31,7 @@ class DetailsViewModel @Inject constructor(
         _uiState.update { it.copy(error = null) }
 
         viewModelScope.launch {
-            val result = repository.getUserById(uuid)
+            val result = repository.getUser(uuid)
 
             result.fold(
                 onSuccess = { usersModel ->

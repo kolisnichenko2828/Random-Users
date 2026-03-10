@@ -1,9 +1,10 @@
-package com.kolisnichenko2828.randomusers.data.local
+package com.kolisnichenko2828.randomusers.domain.mappers
 
-import com.kolisnichenko2828.randomusers.domain.UsersModel
+import com.kolisnichenko2828.randomusers.data.local.UsersEntity
+import com.kolisnichenko2828.randomusers.domain.models.UsersModel
 
-fun UsersEntity.toDomain(): UsersModel {
-    return UsersModel(
+fun UsersModel.toEntity(): UsersEntity {
+    return UsersEntity(
         id = this.id,
         username = this.username,
         password = this.password,
@@ -51,6 +52,6 @@ fun UsersEntity.toDomain(): UsersModel {
     )
 }
 
-fun List<UsersEntity>.toDomain(): List<UsersModel> {
-    return this.map { it.toDomain() }
+fun List<UsersModel>.toEntities(): List<UsersEntity> {
+    return this.map { it.toEntity() }
 }

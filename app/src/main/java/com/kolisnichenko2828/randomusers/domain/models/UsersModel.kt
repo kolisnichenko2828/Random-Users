@@ -1,4 +1,4 @@
-package com.kolisnichenko2828.randomusers.domain
+package com.kolisnichenko2828.randomusers.domain.models
 
 data class UsersModel(
     val id: String,

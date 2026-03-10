@@ -1,9 +1,9 @@
 package com.kolisnichenko2828.randomusers.di
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
-import com.kolisnichenko2828.randomusers.data.local.UsersDatabase
 import com.kolisnichenko2828.randomusers.data.remote.UsersApi
-import com.kolisnichenko2828.randomusers.data.remote.UsersRepository
+import com.kolisnichenko2828.randomusers.data.repository.RemoteUsersListFetcherImpl
+import com.kolisnichenko2828.randomusers.domain.interfaces.UsersListFetcher
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -13,7 +13,12 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import java.util.concurrent.TimeUnit
+import javax.inject.Qualifier
 import javax.inject.Singleton
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class RemoteFetcher
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -55,13 +60,14 @@ object RemoteModule {
 
     @Provides
     @Singleton
-    fun provideUsersRepository(
-        api: UsersApi,
-        database: UsersDatabase
-    ): UsersRepository {
-        return UsersRepository(
-            api = api,
-            database = database
-        )
+    fun provideRemoteUsersFetcherImpl(api: UsersApi): RemoteUsersListFetcherImpl {
+        return RemoteUsersListFetcherImpl(api)
+    }
+
+    @Provides
+    @Singleton
+    @RemoteFetcher
+    fun provideRemoteUsersFetcher(impl: RemoteUsersListFetcherImpl): UsersListFetcher {
+        return impl
     }
 }

@@ -2,8 +2,8 @@ package com.kolisnichenko2828.randomusers.presentation.users
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.kolisnichenko2828.randomusers.data.remote.UsersRepository
-import com.kolisnichenko2828.randomusers.domain.toItemUiModels
+import com.kolisnichenko2828.randomusers.domain.interfaces.UsersListFetcher
+import com.kolisnichenko2828.randomusers.domain.mappers.toUiModels
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class UsersViewModel @Inject constructor(
-    private val repository: UsersRepository
+    private val repository: UsersListFetcher
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(UsersContract.State())
     val uiState = _uiState.asStateFlow()
@@ -50,7 +50,7 @@ class UsersViewModel @Inject constructor(
                 onSuccess = { users ->
                     _uiState.update {
                         it.copy(
-                            users = users.toItemUiModels(),
+                            users = users.toUiModels(),
                             error = null,
                             isLoadingInitial = false
                         )
@@ -94,7 +94,7 @@ class UsersViewModel @Inject constructor(
                 onSuccess = { users ->
                     _uiState.update {
                         it.copy(
-                            users = it.users + users.toItemUiModels(),
+                            users = it.users + users.toUiModels(),
                             error = null,
                             isLoadingNext = false
                         )
@@ -133,7 +133,7 @@ class UsersViewModel @Inject constructor(
                 onSuccess = { users ->
                     _uiState.update {
                         it.copy(
-                            users = users.toItemUiModels(),
+                            users = users.toUiModels(),
                             error = null,
                             isRefreshing = false,
                         )

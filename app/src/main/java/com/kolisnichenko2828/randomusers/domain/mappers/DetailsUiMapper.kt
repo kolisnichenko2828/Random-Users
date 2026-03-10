@@ -1,5 +1,6 @@
-package com.kolisnichenko2828.randomusers.domain
+package com.kolisnichenko2828.randomusers.domain.mappers
 
+import com.kolisnichenko2828.randomusers.domain.models.UsersModel
 import com.kolisnichenko2828.randomusers.presentation.details.AccountUiModel
 import com.kolisnichenko2828.randomusers.presentation.details.ContactInfoUiModel
 import com.kolisnichenko2828.randomusers.presentation.details.DetailsUiModel
