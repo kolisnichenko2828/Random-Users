@@ -8,6 +8,7 @@ import com.kolisnichenko2828.randomusers.data.repository.LocalUsersFetcherImpl
 import com.kolisnichenko2828.randomusers.domain.interfaces.UsersCache
 import com.kolisnichenko2828.randomusers.domain.interfaces.UsersDetailsFetcher
 import com.kolisnichenko2828.randomusers.domain.interfaces.UsersListFetcher
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,42 +23,33 @@ annotation class LocalFetcher
 
 @Module
 @InstallIn(SingletonComponent::class)
-class LocalModule {
-    @Provides
-    @Singleton
-    fun provideUsersDatabase(@ApplicationContext context: Context): UsersDatabase {
-        return Room.databaseBuilder(
-            context,
-            UsersDatabase::class.java,
-            "users"
-        ).build()
-    }
+abstract class LocalModule {
 
-    @Provides
-    fun provideUsersDao(database: UsersDatabase): UsersDao {
-        return database.usersDao()
-    }
-
-    @Provides
-    @Singleton
-    fun provideLocalUsersFetcherImpl(database: UsersDatabase): LocalUsersFetcherImpl {
-        return LocalUsersFetcherImpl(database)
-    }
-
-    @Provides
+    @Binds
     @LocalFetcher
-    fun provideLocalUsersListFetcher(impl: LocalUsersFetcherImpl): UsersListFetcher {
-        return impl
-    }
+    abstract fun bindLocalUsersListFetcher(impl: LocalUsersFetcherImpl): UsersListFetcher
 
-    @Provides
+    @Binds
     @LocalFetcher
-    fun provideUserDetailsFetcher(impl: LocalUsersFetcherImpl): UsersDetailsFetcher {
-        return impl
-    }
+    abstract fun bindUserDetailsFetcher(impl: LocalUsersFetcherImpl): UsersDetailsFetcher
 
-    @Provides
-    fun provideUsersCache(impl: LocalUsersFetcherImpl): UsersCache {
-        return impl
+    @Binds
+    abstract fun bindUsersCache(impl: LocalUsersFetcherImpl): UsersCache
+
+    companion object {
+        @Provides
+        @Singleton
+        fun provideUsersDatabase(@ApplicationContext context: Context): UsersDatabase {
+            return Room.databaseBuilder(
+                context,
+                UsersDatabase::class.java,
+                "users"
+            ).build()
+        }
+
+        @Provides
+        fun provideUsersDao(database: UsersDatabase): UsersDao {
+            return database.usersDao()
+        }
     }
 }
