@@ -32,6 +32,21 @@ private class ExampleLazyCompanion private constructor() {
     }
 }
 
+private class ExampleLazyCompanion2 private constructor() {
+    fun getUsers() {
+        println("list of users")
+    }
+
+    companion object {
+        var instance: ExampleLazyCompanion2? = null
+
+        fun getInstance(): ExampleLazyCompanion2 {
+            instance?.let { return it }
+            return ExampleLazyCompanion2()
+        }
+    }
+}
+
 class SingletonTest {
     @Test
     fun main() {
@@ -42,5 +57,7 @@ class SingletonTest {
         ExampleCompanion.getUsers()
         // LazyCompanion
         ExampleLazyCompanion.instance.getUsers()
+        // LazyCompanion 2
+        ExampleLazyCompanion2.getInstance().getUsers()
     }
 }
