@@ -38,7 +38,7 @@ private class ExampleLazyCompanion2 private constructor() {
     }
 
     companion object {
-        var instance: ExampleLazyCompanion2? = null
+        private var instance: ExampleLazyCompanion2? = null
 
         fun getInstance(): ExampleLazyCompanion2 {
             instance?.let { return it }
