@@ -42,7 +42,9 @@ private class ExampleLazyCompanion2 private constructor() {
 
         fun getInstance(): ExampleLazyCompanion2 {
             instance?.let { return it }
-            return ExampleLazyCompanion2()
+            val tempInstance = ExampleLazyCompanion2()
+            instance = tempInstance
+            return tempInstance
         }
     }
 }
