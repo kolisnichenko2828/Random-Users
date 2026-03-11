@@ -9,7 +9,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,12 +28,6 @@ fun UsersScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val currentState = uiState
-
-    LaunchedEffect(Unit) {
-        if (currentState.users.isEmpty()) {
-            viewModel.setEvent(UsersContract.Event.InitialLoad())
-        }
-    }
 
     PullToRefreshBox(
         isRefreshing = currentState.isRefreshing,

@@ -15,6 +15,13 @@ class UsersViewModel @Inject constructor(
     private val repository: UsersListFetcher
 ) : ViewModel(), StateHolder<UsersContract.State> by StateHolderImpl(UsersContract.State()) {
 
+    init {
+        setupFlow(
+            scope = viewModelScope,
+            onStart = { loadInitial() }
+        )
+    }
+
     fun setEvent(event: UsersContract.Event) {
         when (event) {
             is UsersContract.Event.InitialLoad -> loadInitial()

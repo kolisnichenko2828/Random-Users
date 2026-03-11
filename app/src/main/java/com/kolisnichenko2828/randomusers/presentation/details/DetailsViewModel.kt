@@ -15,6 +15,12 @@ class DetailsViewModel @Inject constructor(
     private val repository: UsersDetailsFetcher
 ) : ViewModel(), StateHolder<DetailsContract.State> by StateHolderImpl(DetailsContract.State()) {
 
+    init {
+        setupFlow(
+            scope = viewModelScope
+        )
+    }
+
     fun setEvent(event: DetailsContract.Event) {
         when (event) {
             is DetailsContract.Event.LoadUser -> loadUserDetails(event.uuid)

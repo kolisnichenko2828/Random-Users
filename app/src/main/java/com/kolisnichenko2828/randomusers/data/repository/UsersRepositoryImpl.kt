@@ -12,7 +12,9 @@ import java.io.IOException
 import java.net.SocketTimeoutException
 import java.util.concurrent.CancellationException
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class UsersRepositoryImpl @Inject constructor(
     @param:RemoteFetcher private val remoteFetcher: UsersListFetcher,
     @param:LocalFetcher private val localFetcher: UsersListFetcher,
