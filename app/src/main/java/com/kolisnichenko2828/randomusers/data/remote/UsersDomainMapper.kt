@@ -1,9 +1,9 @@
 package com.kolisnichenko2828.randomusers.data.remote
 
-import com.kolisnichenko2828.randomusers.data.local.UsersEntity
+import com.kolisnichenko2828.randomusers.domain.models.UsersModel
 
-fun UsersDto.toUserEntity(): UsersEntity {
-    return UsersEntity(
+fun UsersDto.toDomain(): UsersModel {
+    return UsersModel(
         id = this.id,
         username = this.username,
         password = this.password,
@@ -51,6 +51,6 @@ fun UsersDto.toUserEntity(): UsersEntity {
     )
 }
 
-fun List<UsersDto>.toUsersEntities(): List<UsersEntity> {
-    return this.map { it.toUserEntity() }
+fun List<UsersDto>.toDomain(): List<UsersModel> {
+    return this.map { it.toDomain() }
 }
