@@ -2,21 +2,18 @@ package com.kolisnichenko2828.randomusers.presentation.users
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kolisnichenko2828.randomusers.core.StateHolder
+import com.kolisnichenko2828.randomusers.core.StateHolderImpl
 import com.kolisnichenko2828.randomusers.domain.interfaces.UsersListFetcher
 import com.kolisnichenko2828.randomusers.domain.mappers.toUiModels
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class UsersViewModel @Inject constructor(
     private val repository: UsersListFetcher
-) : ViewModel() {
-    private val _uiState = MutableStateFlow(UsersContract.State())
-    val uiState = _uiState.asStateFlow()
+) : ViewModel(), StateHolder<UsersContract.State> by StateHolderImpl(UsersContract.State()) {
 
     fun setEvent(event: UsersContract.Event) {
         when (event) {
@@ -28,11 +25,10 @@ class UsersViewModel @Inject constructor(
     }
 
     private fun loadInitial(limit: Int = 30) {
-        val currentState = _uiState.value
         if (currentState.isLoadingInitial) return
 
         viewModelScope.launch {
-            _uiState.update {
+            updateState {
                 it.copy(
                     error = null,
                     isLoadingInitial = true,
@@ -48,7 +44,7 @@ class UsersViewModel @Inject constructor(
 
             usersModels.fold(
                 onSuccess = { users ->
-                    _uiState.update {
+                    updateState {
                         it.copy(
                             users = users.toUiModels(),
                             error = null,
@@ -57,7 +53,7 @@ class UsersViewModel @Inject constructor(
                     }
                 },
                 onFailure = { exception ->
-                    _uiState.update {
+                    updateState {
                         it.copy(
                             error = exception,
                             isLoadingInitial = false
@@ -69,16 +65,15 @@ class UsersViewModel @Inject constructor(
     }
 
     private fun checkIndex(index: Int) {
-        val threshold = _uiState.value.users.size - 10
+        val threshold = currentState.users.size - 10
         if (index == threshold) loadNext()
     }
 
     private fun loadNext(limit: Int = 30) {
-        val currentState = _uiState.value
         if (currentState.isLoadingNext) return
 
         viewModelScope.launch {
-            _uiState.update {
+            updateState {
                 it.copy(
                     error = null,
                     isLoadingNext = true
@@ -92,7 +87,7 @@ class UsersViewModel @Inject constructor(
 
             usersModels.fold(
                 onSuccess = { users ->
-                    _uiState.update {
+                    updateState {
                         it.copy(
                             users = it.users + users.toUiModels(),
                             error = null,
@@ -101,7 +96,7 @@ class UsersViewModel @Inject constructor(
                     }
                 },
                 onFailure = { exception ->
-                    _uiState.update {
+                    updateState {
                         it.copy(
                             error = exception,
                             isLoadingNext = false
@@ -113,11 +108,10 @@ class UsersViewModel @Inject constructor(
     }
 
     fun refresh(limit: Int = 30) {
-        val currentState = _uiState.value
         if (currentState.isRefreshing) return
 
         viewModelScope.launch {
-            _uiState.update {
+            updateState {
                 it.copy(
                     error = null,
                     isRefreshing = true
@@ -131,7 +125,7 @@ class UsersViewModel @Inject constructor(
 
             usersModels.fold(
                 onSuccess = { users ->
-                    _uiState.update {
+                    updateState {
                         it.copy(
                             users = users.toUiModels(),
                             error = null,
@@ -140,7 +134,7 @@ class UsersViewModel @Inject constructor(
                     }
                 },
                 onFailure = { exception ->
-                    _uiState.update {
+                    updateState {
                         it.copy(
                             error = exception,
                             isRefreshing = false

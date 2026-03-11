@@ -2,22 +2,18 @@ package com.kolisnichenko2828.randomusers.presentation.details
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kolisnichenko2828.randomusers.core.StateHolder
+import com.kolisnichenko2828.randomusers.core.StateHolderImpl
 import com.kolisnichenko2828.randomusers.domain.interfaces.UsersDetailsFetcher
 import com.kolisnichenko2828.randomusers.domain.mappers.toDetailsUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class DetailsViewModel @Inject constructor(
     private val repository: UsersDetailsFetcher
-) : ViewModel() {
-    private val _uiState = MutableStateFlow(DetailsContract.State())
-    val uiState: StateFlow<DetailsContract.State> = _uiState.asStateFlow()
+) : ViewModel(), StateHolder<DetailsContract.State> by StateHolderImpl(DetailsContract.State()) {
 
     fun setEvent(event: DetailsContract.Event) {
         when (event) {
@@ -26,9 +22,9 @@ class DetailsViewModel @Inject constructor(
     }
 
     private fun loadUserDetails(uuid: String) {
-        if (_uiState.value.userDetails?.uuid == uuid) return
+        if (currentState.userDetails?.uuid == uuid) return
 
-        _uiState.update { it.copy(error = null) }
+        updateState { it.copy(error = null) }
 
         viewModelScope.launch {
             val result = repository.getUser(uuid)
@@ -37,14 +33,14 @@ class DetailsViewModel @Inject constructor(
                 onSuccess = { usersModel ->
                     val uiModel = usersModel.toDetailsUiModel()
 
-                    _uiState.update {
+                    updateState {
                         it.copy(
                             userDetails = uiModel
                         )
                     }
                 },
                 onFailure = { error ->
-                    _uiState.update {
+                    updateState {
                         it.copy(
                             error = error
                         )
