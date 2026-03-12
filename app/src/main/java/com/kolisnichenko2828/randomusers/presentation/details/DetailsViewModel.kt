@@ -2,8 +2,8 @@ package com.kolisnichenko2828.randomusers.presentation.details
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.kolisnichenko2828.randomusers.core.StateHolder
 import com.kolisnichenko2828.randomusers.core.StateHolderImpl
+import com.kolisnichenko2828.randomusers.core.StateHolder
 import com.kolisnichenko2828.randomusers.domain.interfaces.UsersDetailsFetcher
 import com.kolisnichenko2828.randomusers.domain.mappers.toDetailsUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -13,13 +13,8 @@ import javax.inject.Inject
 @HiltViewModel
 class DetailsViewModel @Inject constructor(
     private val repository: UsersDetailsFetcher
-) : ViewModel(), StateHolder<DetailsContract.State> by StateHolderImpl(DetailsContract.State()) {
-
-    init {
-        setupFlow(
-            scope = viewModelScope
-        )
-    }
+) : ViewModel(),
+    StateHolder<DetailsContract.State> by StateHolderImpl(DetailsContract.State()) {
 
     fun setEvent(event: DetailsContract.Event) {
         when (event) {
@@ -28,7 +23,7 @@ class DetailsViewModel @Inject constructor(
     }
 
     private fun loadUserDetails(uuid: String) {
-        if (currentState.userDetails?.uuid == uuid) return
+        if (uiState.value.userDetails?.uuid == uuid) return
 
         updateState { it.copy(error = null) }
 

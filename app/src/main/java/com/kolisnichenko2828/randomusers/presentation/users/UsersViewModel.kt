@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kolisnichenko2828.randomusers.core.StateHolder
 import com.kolisnichenko2828.randomusers.core.StateHolderImpl
+import com.kolisnichenko2828.randomusers.core.onStartCollectingState
 import com.kolisnichenko2828.randomusers.domain.interfaces.UsersListFetcher
 import com.kolisnichenko2828.randomusers.domain.mappers.toUiModels
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -13,13 +14,13 @@ import javax.inject.Inject
 @HiltViewModel
 class UsersViewModel @Inject constructor(
     private val repository: UsersListFetcher
-) : ViewModel(), StateHolder<UsersContract.State> by StateHolderImpl(UsersContract.State()) {
+) : ViewModel(),
+    StateHolder<UsersContract.State> by StateHolderImpl(UsersContract.State()) {
 
     init {
-        setupFlow(
-            scope = viewModelScope,
-            onStart = { loadInitial() }
-        )
+        onStartCollectingState {
+            setEvent(UsersContract.Event.InitialLoad())
+        }
     }
 
     fun setEvent(event: UsersContract.Event) {
@@ -32,7 +33,7 @@ class UsersViewModel @Inject constructor(
     }
 
     private fun loadInitial(limit: Int = 30) {
-        if (currentState.isLoadingInitial) return
+        if (uiState.value.isLoadingInitial) return
 
         viewModelScope.launch {
             updateState {
@@ -72,12 +73,12 @@ class UsersViewModel @Inject constructor(
     }
 
     private fun checkIndex(index: Int) {
-        val threshold = currentState.users.size - 10
+        val threshold = uiState.value.users.size - 10
         if (index == threshold) loadNext()
     }
 
     private fun loadNext(limit: Int = 30) {
-        if (currentState.isLoadingNext) return
+        if (uiState.value.isLoadingNext) return
 
         viewModelScope.launch {
             updateState {
@@ -88,7 +89,7 @@ class UsersViewModel @Inject constructor(
             }
 
             val usersModels = repository.getUsers(
-                offset = currentState.users.size,
+                offset = uiState.value.users.size,
                 limit = limit
             )
 
@@ -115,7 +116,7 @@ class UsersViewModel @Inject constructor(
     }
 
     fun refresh(limit: Int = 30) {
-        if (currentState.isRefreshing) return
+        if (uiState.value.isRefreshing) return
 
         viewModelScope.launch {
             updateState {
