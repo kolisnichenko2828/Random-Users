@@ -3,17 +3,15 @@ package com.kolisnichenko2828.randomusers.data.repository
 import com.kolisnichenko2828.randomusers.core.AppException
 import com.kolisnichenko2828.randomusers.data.local.UsersDatabase
 import com.kolisnichenko2828.randomusers.data.local.toDomain
+import com.kolisnichenko2828.randomusers.domain.interfaces.UsersDetailsFetcher
 import com.kolisnichenko2828.randomusers.domain.interfaces.UsersListFetcher
 import com.kolisnichenko2828.randomusers.domain.models.UsersModel
-import com.kolisnichenko2828.randomusers.domain.interfaces.UsersCache
-import com.kolisnichenko2828.randomusers.domain.interfaces.UsersDetailsFetcher
-import com.kolisnichenko2828.randomusers.domain.mappers.toEntities
 import java.util.concurrent.CancellationException
 import javax.inject.Inject
 
 class LocalUsersFetcherImpl @Inject constructor(
     private val database: UsersDatabase
-) : UsersListFetcher, UsersDetailsFetcher, UsersCache {
+) : UsersListFetcher, UsersDetailsFetcher {
 
     override suspend fun getUsers(
         offset: Int,
@@ -40,13 +38,5 @@ class LocalUsersFetcherImpl @Inject constructor(
                 return Result.failure(AppException.DatabaseError())
             }
         )
-    }
-
-    override suspend fun saveUsers(users: List<UsersModel>) {
-        database.usersDao().insertUsers(users.toEntities())
-    }
-
-    override suspend fun clearUsers() {
-        database.usersDao().clearAll()
     }
 }

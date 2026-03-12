@@ -5,6 +5,7 @@ import androidx.room.Room
 import com.kolisnichenko2828.randomusers.data.local.UsersDao
 import com.kolisnichenko2828.randomusers.data.local.UsersDatabase
 import com.kolisnichenko2828.randomusers.data.repository.LocalUsersFetcherImpl
+import com.kolisnichenko2828.randomusers.data.repository.UsersCacheImpl
 import com.kolisnichenko2828.randomusers.domain.interfaces.UsersCache
 import com.kolisnichenko2828.randomusers.domain.interfaces.UsersDetailsFetcher
 import com.kolisnichenko2828.randomusers.domain.interfaces.UsersListFetcher
@@ -34,7 +35,7 @@ abstract class LocalModule {
     abstract fun bindUserDetailsFetcher(impl: LocalUsersFetcherImpl): UsersDetailsFetcher
 
     @Binds
-    abstract fun bindUsersCache(impl: LocalUsersFetcherImpl): UsersCache
+    abstract fun bindUsersCache(impl: UsersCacheImpl): UsersCache
 
     companion object {
         @Provides
