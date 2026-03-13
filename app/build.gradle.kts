@@ -78,6 +78,8 @@ dependencies {
     implementation(libs.koin.compose.viewmodel)
     implementation(libs.koin.test)
     implementation(libs.koin.test.junit)
+    implementation(libs.koin.annotations)
+    ksp(libs.koin.ksp.compiler)
     // kotlinx serialization
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.kotlinx.serialization.core)

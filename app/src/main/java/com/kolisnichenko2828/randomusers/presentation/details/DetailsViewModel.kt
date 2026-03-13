@@ -8,10 +8,13 @@ import com.kolisnichenko2828.randomusers.core.onStartCollectingState
 import com.kolisnichenko2828.randomusers.domain.interfaces.UsersDetailsFetcher
 import com.kolisnichenko2828.randomusers.domain.mappers.toDetailsUiModel
 import kotlinx.coroutines.launch
+import org.koin.android.annotation.KoinViewModel
+import org.koin.core.annotation.InjectedParam
 
+@KoinViewModel
 class DetailsViewModel(
     private val repository: UsersDetailsFetcher,
-    private val uuid: String
+    @InjectedParam private val uuid: String
 ) : ViewModel(),
     StateHolder<DetailsContract.State> by StateHolderImpl(DetailsContract.State()) {
 

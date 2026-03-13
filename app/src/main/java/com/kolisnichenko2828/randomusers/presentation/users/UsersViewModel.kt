@@ -8,7 +8,9 @@ import com.kolisnichenko2828.randomusers.core.onStartCollectingState
 import com.kolisnichenko2828.randomusers.domain.interfaces.UsersListFetcher
 import com.kolisnichenko2828.randomusers.domain.mappers.toUiModels
 import kotlinx.coroutines.launch
+import org.koin.android.annotation.KoinViewModel
 
+@KoinViewModel
 class UsersViewModel(
     private val repository: UsersListFetcher
 ) : ViewModel(),

@@ -6,10 +6,11 @@ junitVersion = "1.3.0"
 espressoCore = "3.7.0"
 lifecycleRuntimeKtx = "2.10.0"
 activityCompose = "1.12.4"
-kotlin = "2.2.21"
-composeBom = "2026.02.01"
+kotlin = "2.3.10"
+composeBom = "2026.03.00"
 # koin
 koin-bom = "4.1.1"
+koin-annotations = "2.3.1"
 # jetpack navigation 3
 nav3Core = "1.0.0"
 lifecycleViewmodelNav3 = "2.10.0"
@@ -51,6 +52,8 @@ koin-compose = { module = "io.insert-koin:koin-compose" }
 koin-compose-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel" }
 koin-test = { module = "io.insert-koin:koin-test" }
 koin-test-junit = { module = "io.insert-koin:koin-test-junit4" }
+koin-annotations = { module = "io.insert-koin:koin-annotations", version.ref = "koin-annotations" }
+koin-ksp-compiler = { module = "io.insert-koin:koin-ksp-compiler", version.ref = "koin-annotations" }
 # jetpack navigation 3
 androidx-navigation3-runtime = { module = "androidx.navigation3:navigation3-runtime", version.ref = "nav3Core" }
 androidx-navigation3-ui = { module = "androidx.navigation3:navigation3-ui", version.ref = "nav3Core" }

@@ -1,19 +1,23 @@
 package com.kolisnichenko2828.randomusers.data.repository
 
 import com.kolisnichenko2828.randomusers.core.AppException
+import com.kolisnichenko2828.randomusers.di.FetcherSource
 import com.kolisnichenko2828.randomusers.domain.interfaces.UsersCache
 import com.kolisnichenko2828.randomusers.domain.interfaces.UsersDetailsFetcher
 import com.kolisnichenko2828.randomusers.domain.interfaces.UsersListFetcher
 import com.kolisnichenko2828.randomusers.domain.models.UsersModel
+import org.koin.core.annotation.Named
+import org.koin.core.annotation.Single
 import retrofit2.HttpException
 import java.io.IOException
 import java.net.SocketTimeoutException
 import java.util.concurrent.CancellationException
 
+@Single(binds = [UsersListFetcher::class, UsersDetailsFetcher::class])
 class UsersRepositoryImpl(
-    private val remoteFetcher: UsersListFetcher,
-    private val localFetcher: UsersListFetcher,
-    private val detailsFetcher: UsersDetailsFetcher,
+    @Named(FetcherSource.REMOTE) private val remoteFetcher: UsersListFetcher,
+    @Named(FetcherSource.LOCAL) private val localFetcher: UsersListFetcher,
+    @Named(FetcherSource.LOCAL) private val detailsFetcher: UsersDetailsFetcher,
     private val usersCache: UsersCache
 ) : UsersListFetcher, UsersDetailsFetcher {
 
