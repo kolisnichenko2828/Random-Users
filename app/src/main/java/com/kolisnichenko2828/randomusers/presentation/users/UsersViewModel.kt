@@ -8,6 +8,7 @@ import com.kolisnichenko2828.randomusers.core.onStartCollectingState
 import com.kolisnichenko2828.randomusers.domain.interfaces.UsersListFetcher
 import com.kolisnichenko2828.randomusers.domain.mappers.toUiModels
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -16,6 +17,8 @@ class UsersViewModel @Inject constructor(
     private val repository: UsersListFetcher
 ) : ViewModel(),
     StateHolder<UsersContract.State> by StateHolderImpl(UsersContract.State()) {
+
+    private var job: Job? = null
 
     init {
         onStartCollectingState {
@@ -35,7 +38,9 @@ class UsersViewModel @Inject constructor(
     private fun loadInitial(limit: Int = 30) {
         if (uiState.value.isLoadingInitial) return
 
-        viewModelScope.launch {
+        job?.cancel()
+
+        job = viewModelScope.launch {
             updateState {
                 it.copy(
                     error = null,
@@ -80,7 +85,9 @@ class UsersViewModel @Inject constructor(
     private fun loadNext(limit: Int = 30) {
         if (uiState.value.isLoadingNext) return
 
-        viewModelScope.launch {
+        job?.cancel()
+
+        job = viewModelScope.launch {
             updateState {
                 it.copy(
                     error = null,
@@ -118,7 +125,9 @@ class UsersViewModel @Inject constructor(
     fun refresh(limit: Int = 30) {
         if (uiState.value.isRefreshing) return
 
-        viewModelScope.launch {
+        job?.cancel()
+
+        job = viewModelScope.launch {
             updateState {
                 it.copy(
                     error = null,

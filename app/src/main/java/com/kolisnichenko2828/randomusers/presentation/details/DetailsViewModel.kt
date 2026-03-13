@@ -11,6 +11,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 @HiltViewModel(assistedFactory = DetailsViewModel.Factory::class)
@@ -19,6 +20,8 @@ class DetailsViewModel @AssistedInject constructor(
     @Assisted val uuid: String
 ) : ViewModel(),
     StateHolder<DetailsContract.State> by StateHolderImpl(DetailsContract.State()) {
+
+    private var job: Job? = null
 
     init {
         onStartCollectingState {
@@ -35,9 +38,11 @@ class DetailsViewModel @AssistedInject constructor(
     private fun loadUserDetails(uuid: String) {
         if (uiState.value.userDetails?.uuid == uuid) return
 
+        job?.cancel()
+
         updateState { it.copy(error = null) }
 
-        viewModelScope.launch {
+        job = viewModelScope.launch {
             val result = repository.getUser(uuid)
 
             result.fold(
