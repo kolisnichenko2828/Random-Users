@@ -20,11 +20,6 @@ class DetailsViewModel @AssistedInject constructor(
 ) : ViewModel(),
     StateHolder<DetailsContract.State> by StateHolderImpl(DetailsContract.State()) {
 
-    @AssistedFactory
-    interface Factory {
-        fun create(uuid: String): DetailsViewModel
-    }
-
     init {
         onStartCollectingState {
             setEvent(DetailsContract.Event.LoadUser(uuid))
@@ -64,5 +59,10 @@ class DetailsViewModel @AssistedInject constructor(
                 }
             )
         }
+    }
+
+    @AssistedFactory
+    interface Factory {
+        fun create(uuid: String): DetailsViewModel
     }
 }
