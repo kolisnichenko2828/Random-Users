@@ -7,6 +7,8 @@ import com.kolisnichenko2828.randomusers.domain.interfaces.UsersListFetcher
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
+import org.koin.core.module.dsl.bind
+import org.koin.core.module.dsl.singleOf
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import retrofit2.Retrofit
@@ -42,9 +44,8 @@ val remoteModule = module {
         get<Retrofit>().create(UsersApi::class.java)
     }
 
-    single<UsersListFetcher>(named(FetcherSource.REMOTE)) {
-        RemoteUsersListFetcherImpl(
-            api = get()
-        )
+    singleOf(::RemoteUsersListFetcherImpl) {
+        qualifier = named(FetcherSource.REMOTE)
+        bind<UsersListFetcher>()
     }
 }

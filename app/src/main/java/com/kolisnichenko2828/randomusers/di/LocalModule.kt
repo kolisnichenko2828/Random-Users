@@ -8,8 +8,10 @@ import com.kolisnichenko2828.randomusers.domain.interfaces.UsersCache
 import com.kolisnichenko2828.randomusers.domain.interfaces.UsersDetailsFetcher
 import com.kolisnichenko2828.randomusers.domain.interfaces.UsersListFetcher
 import org.koin.android.ext.koin.androidContext
+import org.koin.core.module.dsl.binds
+import org.koin.core.module.dsl.singleOf
 import org.koin.core.qualifier.named
-import org.koin.dsl.binds
+import org.koin.dsl.bind
 import org.koin.dsl.module
 
 val localModule = module {
@@ -21,16 +23,15 @@ val localModule = module {
         ).build()
     }
 
-    single<UsersCache> {
-        UsersCacheImpl(
-            database = get()
+    singleOf(::UsersCacheImpl) bind UsersCache::class
+
+    singleOf(::LocalUsersFetcherImpl) {
+        qualifier = named(FetcherSource.LOCAL)
+        binds(
+            classes = listOf(
+                UsersListFetcher::class,
+                UsersDetailsFetcher::class
+            )
         )
     }
-
-    single(named(FetcherSource.LOCAL)) {
-        LocalUsersFetcherImpl(get())
-    } binds arrayOf(
-        UsersListFetcher::class,
-        UsersDetailsFetcher::class
-    )
 }
