@@ -4,9 +4,8 @@ import com.kolisnichenko2828.randomusers.data.remote.UsersApi
 import com.kolisnichenko2828.randomusers.data.remote.toDomain
 import com.kolisnichenko2828.randomusers.domain.interfaces.UsersListFetcher
 import com.kolisnichenko2828.randomusers.domain.models.UsersModel
-import javax.inject.Inject
 
-class RemoteUsersListFetcherImpl @Inject constructor(
+class RemoteUsersListFetcherImpl(
     private val api: UsersApi
 ) : UsersListFetcher {
     override suspend fun getUsers(

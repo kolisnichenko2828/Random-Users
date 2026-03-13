@@ -4,9 +4,8 @@ import com.kolisnichenko2828.randomusers.data.local.UsersDatabase
 import com.kolisnichenko2828.randomusers.domain.interfaces.UsersCache
 import com.kolisnichenko2828.randomusers.domain.mappers.toEntities
 import com.kolisnichenko2828.randomusers.domain.models.UsersModel
-import javax.inject.Inject
 
-class UsersCacheImpl @Inject constructor(
+class UsersCacheImpl(
     private val database: UsersDatabase
 ) : UsersCache {
 

@@ -14,17 +14,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kolisnichenko2828.randomusers.R
 import com.kolisnichenko2828.randomusers.core.toUserReadableMessage
 import com.kolisnichenko2828.randomusers.presentation.users.components.ErrorMessage
 import com.kolisnichenko2828.randomusers.presentation.users.components.UsersContent
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun UsersScreen(
     onUserClick: (String) -> Unit,
-    viewModel: UsersViewModel = hiltViewModel()
+    viewModel: UsersViewModel = koinViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val currentState = uiState

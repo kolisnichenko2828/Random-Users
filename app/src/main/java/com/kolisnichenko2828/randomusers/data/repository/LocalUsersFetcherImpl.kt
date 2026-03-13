@@ -7,9 +7,8 @@ import com.kolisnichenko2828.randomusers.domain.interfaces.UsersDetailsFetcher
 import com.kolisnichenko2828.randomusers.domain.interfaces.UsersListFetcher
 import com.kolisnichenko2828.randomusers.domain.models.UsersModel
 import java.util.concurrent.CancellationException
-import javax.inject.Inject
 
-class LocalUsersFetcherImpl @Inject constructor(
+class LocalUsersFetcherImpl(
     private val database: UsersDatabase
 ) : UsersListFetcher, UsersDetailsFetcher {
 

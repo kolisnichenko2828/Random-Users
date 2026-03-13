@@ -1,8 +1,6 @@
 package com.kolisnichenko2828.randomusers.data.repository
 
 import com.kolisnichenko2828.randomusers.core.AppException
-import com.kolisnichenko2828.randomusers.di.LocalFetcher
-import com.kolisnichenko2828.randomusers.di.RemoteFetcher
 import com.kolisnichenko2828.randomusers.domain.interfaces.UsersCache
 import com.kolisnichenko2828.randomusers.domain.interfaces.UsersDetailsFetcher
 import com.kolisnichenko2828.randomusers.domain.interfaces.UsersListFetcher
@@ -11,14 +9,11 @@ import retrofit2.HttpException
 import java.io.IOException
 import java.net.SocketTimeoutException
 import java.util.concurrent.CancellationException
-import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-class UsersRepositoryImpl @Inject constructor(
-    @param:RemoteFetcher private val remoteFetcher: UsersListFetcher,
-    @param:LocalFetcher private val localFetcher: UsersListFetcher,
-    @param:LocalFetcher private val detailsFetcher: UsersDetailsFetcher,
+class UsersRepositoryImpl(
+    private val remoteFetcher: UsersListFetcher,
+    private val localFetcher: UsersListFetcher,
+    private val detailsFetcher: UsersDetailsFetcher,
     private val usersCache: UsersCache
 ) : UsersListFetcher, UsersDetailsFetcher {
 

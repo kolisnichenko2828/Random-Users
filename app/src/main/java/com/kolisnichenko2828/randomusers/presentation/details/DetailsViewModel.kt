@@ -7,23 +7,13 @@ import com.kolisnichenko2828.randomusers.core.StateHolderImpl
 import com.kolisnichenko2828.randomusers.core.onStartCollectingState
 import com.kolisnichenko2828.randomusers.domain.interfaces.UsersDetailsFetcher
 import com.kolisnichenko2828.randomusers.domain.mappers.toDetailsUiModel
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 
-@HiltViewModel(assistedFactory = DetailsViewModel.Factory::class)
-class DetailsViewModel @AssistedInject constructor(
+class DetailsViewModel(
     private val repository: UsersDetailsFetcher,
-    @Assisted val uuid: String
+    private val uuid: String
 ) : ViewModel(),
     StateHolder<DetailsContract.State> by StateHolderImpl(DetailsContract.State()) {
-
-    @AssistedFactory
-    interface Factory {
-        fun create(uuid: String): DetailsViewModel
-    }
 
     init {
         onStartCollectingState {

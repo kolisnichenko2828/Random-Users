@@ -7,9 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.kolisnichenko2828.randomusers.presentation.navigation.RandomUsersApp
 import com.kolisnichenko2828.randomusers.presentation.theme.RandomUsersTheme
-import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()

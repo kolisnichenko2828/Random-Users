@@ -3,21 +3,25 @@ package com.kolisnichenko2828.randomusers.di
 import com.kolisnichenko2828.randomusers.data.repository.UsersRepositoryImpl
 import com.kolisnichenko2828.randomusers.domain.interfaces.UsersDetailsFetcher
 import com.kolisnichenko2828.randomusers.domain.interfaces.UsersListFetcher
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
+import org.koin.core.qualifier.named
+import org.koin.dsl.binds
+import org.koin.dsl.module
 
-@Module
-@InstallIn(SingletonComponent::class)
-abstract class RepositoryModule {
+enum class FetcherSource {
+    LOCAL,
+    REMOTE
+}
 
-    @Binds
-    @Singleton
-    abstract fun bindUsersListFetcher(impl: UsersRepositoryImpl): UsersListFetcher
-
-    @Binds
-    @Singleton
-    abstract fun bindUsersDetailsFetcher(impl: UsersRepositoryImpl): UsersDetailsFetcher
+val repositoryModule = module {
+    single {
+        UsersRepositoryImpl(
+            remoteFetcher = get(named(FetcherSource.REMOTE)),
+            localFetcher = get(named(FetcherSource.LOCAL)),
+            detailsFetcher = get(named(FetcherSource.LOCAL)),
+            usersCache = get()
+        )
+    } binds arrayOf(
+        UsersListFetcher::class,
+        UsersDetailsFetcher::class
+    )
 }

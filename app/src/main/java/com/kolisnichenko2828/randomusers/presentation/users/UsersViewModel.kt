@@ -7,12 +7,9 @@ import com.kolisnichenko2828.randomusers.core.StateHolderImpl
 import com.kolisnichenko2828.randomusers.core.onStartCollectingState
 import com.kolisnichenko2828.randomusers.domain.interfaces.UsersListFetcher
 import com.kolisnichenko2828.randomusers.domain.mappers.toUiModels
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-@HiltViewModel
-class UsersViewModel @Inject constructor(
+class UsersViewModel(
     private val repository: UsersListFetcher
 ) : ViewModel(),
     StateHolder<UsersContract.State> by StateHolderImpl(UsersContract.State()) {

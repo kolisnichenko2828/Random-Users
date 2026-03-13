@@ -4,7 +4,6 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
     id("com.google.devtools.ksp")
-    id("com.google.dagger.hilt.android")
     id("org.jetbrains.kotlin.plugin.serialization")
     id("kotlin-parcelize")
 }
@@ -16,6 +15,7 @@ if (localPropertiesFile.exists() && localPropertiesFile.isFile) {
         localProps.load(it)
     }
 }
+
 android {
     namespace = "com.kolisnichenko2828.randomusers"
     compileSdk {
@@ -69,10 +69,15 @@ android {
 }
 
 dependencies {
-    // ksp + hilt
-    implementation(libs.hilt.android)
-    ksp(libs.hilt.android.compiler)
-    implementation(libs.androidx.hilt.navigation.compose)
+    // koin
+    implementation(platform(libs.koin.bom))
+    implementation(libs.koin.core)
+    implementation(libs.koin.android)
+    implementation(libs.koin.androidx.compose)
+    implementation(libs.koin.compose)
+    implementation(libs.koin.compose.viewmodel)
+    implementation(libs.koin.test)
+    implementation(libs.koin.test.junit)
     // kotlinx serialization
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.kotlinx.serialization.core)
